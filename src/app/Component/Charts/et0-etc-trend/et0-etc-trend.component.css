@@ -1,13 +1,51 @@
 /* et0-etc-trend.component.css */
 .chart-container {
-    width: 100%;
-    height: 100%;
+    /* width: 100%;
+    height: 100%; */
+    min-height: 0; /* Importante per permettere al contenuto di adattarsi */
+    position: relative;
+    flex: 1
   }
 
   :host {
     display: block;
+    width: 100%;
+    /* flex-direction: column; */
     height: 100%;
+    
     width: 100%; /* Aggiunta della regola per la larghezza al 100% */
     border: 1px solid #ccc;
     padding: 10px;
+  }
+
+  
+  .chart-title {
+    font-size: 14px;
+    margin: 0 0 10px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .chart-wrapper {
+    /* flex: 1; */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  
+  canvas {
+    /* flex: 1; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
   }

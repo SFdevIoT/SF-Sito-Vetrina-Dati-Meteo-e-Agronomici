@@ -1,0 +1,16 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Assicura che il container occupi almeno l'intera altezza della viewport */
+}
+
+.main-content {
+  flex: 1 0 auto; /* Fa sì che il contenuto principale si espanda per occupare lo spazio disponibile */
+  padding: 20px;
+  background-color: #1e2233;
+  overflow-y: auto; /* Aggiunge una scrollbar verticale se il contenuto supera l'altezza disponibile */
+}
+
+app-footer {
+  flex-shrink: 0; /* Impedisce al footer di ridursi */
+}

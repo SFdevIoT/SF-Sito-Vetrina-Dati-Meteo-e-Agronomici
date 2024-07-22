@@ -1,10 +1,7 @@
-<div>
-  <!-- Buttons -->
-  <div class="example-flex-container">
+<div class="selector-container">
+  <div class="selector-group location-buttons">
     <button
-      mat-button
       *ngFor="let button of buttons"
-      color="primary"
       (click)="handleButtonClick(button.id)"
       [class.active]="activeButtonId === button.id"
     >
@@ -12,10 +9,22 @@
     </button>
   </div>
 
-  <!-- Tabs -->
-  <div class="tabs-container mat-tab-label">
-    <mat-tab-group (selectedIndexChange)="handleTabChange($event)">
-      <mat-tab *ngFor="let tab of tabs" label="{{ tab.label }}"></mat-tab>
-    </mat-tab-group>
+  <div class="selector-group year-selector">
+    <mat-button-toggle-group (change)="handleTabChange($event.value)">
+      <mat-button-toggle *ngFor="let tab of tabs; let i = index" [value]="i">
+        {{ tab.label }}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <div class="selector-group campaign-toggle">
+    <img src="assets/winter-icon.png" alt="Winter" class="campaign-icon">
+    <p-selectButton [options]="campaigns" [(ngModel)]="selectedCampaign" optionLabel="label" optionValue="id">
+      <ng-template let-item pTemplate>
+        <i [class]="item.id === 'inverno' ? 'pi pi-snowflake' : 'pi pi-sun'"></i>
+        {{ item.label }}
+      </ng-template>
+    </p-selectButton>
+    <img src="assets/summer-icon.png" alt="Summer" class="campaign-icon">
   </div>
 </div>

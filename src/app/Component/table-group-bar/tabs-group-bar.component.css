@@ -1,90 +1,113 @@
-/* Stili per il container principale */
-:host {
+.selector-container {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
+  background-color: #27293d;
+  padding: 10px;
+  border-radius: 8px;
+  flex-wrap: nowrap; /* Impedisce il wrapping degli elementi */
 }
 
-section {
-    display: table;
-  }
-  
-  .example-label {
-    display: table-cell;
-    font-size: 14px;
-    margin-left: 8px;
-    min-width: 120px;
-  }
-  
-  .example-button-row {
-    display: table-cell;
-    max-width: 600px;
-  }
-  
-  .example-button-row .mat-mdc-button-base {
-    margin: 8px 8px 8px 0;
-  }
-  
+.selector-group {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin: 0 5px;
+}
 
-  /* Stili per i pulsanti */
-  .example-flex-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 20px; /* Aggiunto spazio tra i pulsanti e le tab */
-  }
-  
-  .example-button-container {
-    display: flex;
-    justify-content: center;
-    width: 120px;
-  }
-  
+.location-buttons {
+  justify-content: flex-start;
+}
 
-  .button-container {
-    display: flex;
-  }
-  
-  button {
-   /* margin-right: 10px;  /* Spazio tra i pulsanti */
-    margin: 0 10px;
-  padding: 8px 16px;
-  font-size: 14px;
+.location-buttons button {
   background-color: #3498db;
-  color: #ffffff;
+  color: white;
   border: none;
-  cursor: pointer;
-  border-radius: 4px;
-  }
-  
-  button.active {
-    background-color: #2980b9;  /* Colore di sfondo quando attivo */
-    color: #ffffff;            /* Colore del testo quando attivo */
-  }
-  
-
-
-
-
-  /* Stili per le tabs */
-mat-tab-group {
-  max-width: 600px; /* Impostato una larghezza massima per le tabs */
-
-}
-
-/* Aggiunto stile per le tabs */
-.mat-tab-label {
-  /* background-color: #3498db; */
-  color: #ffffff;
   padding: 8px 16px;
+  margin-right: 5px;
   border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  white-space: nowrap; /* Impedisce il wrapping del testo del bottone */
 }
 
-.mat-tab-label-active {
+.location-buttons button.active {
   background-color: #2980b9;
 }
 
-/* Aggiunto stile per il container delle tabs */
-.tabs-container {
-  margin-top: 20px; /* Aggiunto spazio tra i pulsanti e le tabs */
+.year-selector ::ng-deep .mat-button-toggle-group {
+  border: none;
+  background-color: #34495e;
+  border-radius: 4px;
+}
+
+.year-selector ::ng-deep .mat-button-toggle {
+  color: white;
+  background-color: transparent;
+}
+
+.year-selector ::ng-deep .mat-button-toggle-checked {
+  background-color: #2c3e50;
+}
+
+.campaign-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.campaign-toggle ::ng-deep .p-selectbutton {
+  border: none;
+}
+
+.campaign-toggle ::ng-deep .p-button {
+  background-color: #34495e;
+  border: none;
+  color: white;
+  transition: all 0.3s;
+  padding: 8px 16px;
+}
+
+.campaign-toggle ::ng-deep .p-button.p-highlight {
+  background-color: #f1c40f;
+  color: #2c3e50;
+}
+
+.campaign-toggle ::ng-deep .p-button:first-child.p-highlight {
+  background-color: #3498db;
+}
+
+.campaign-toggle ::ng-deep .p-button i {
+  margin-right: 5px;
+  font-size: 1.2em; /* Aumenta la dimensione dell'icona */
+
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .selector-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .selector-group {
+    margin: 5px 0;
+  }
+
+  .location-buttons, .campaign-toggle {
+    justify-content: center;
+  }
+}
+
+
+
+.campaign-icon {
+  height: 40px; /* Regola questa altezza in base all'altezza del tuo p-selectButton */
+  width: auto;
+  margin: 0 10px;
+}
+
+/* Assicurati che le icone siano visibili */
+.pi-snowflake, .pi-sun {
+  display: inline-block !important;
 }

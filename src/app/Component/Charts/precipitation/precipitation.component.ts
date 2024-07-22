@@ -1,11 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-precipitation',
   templateUrl: './precipitation.component.html',
   styleUrls: ['./precipitation.component.css']
 })
-export class PrecipitationComponent implements OnInit{
+export class PrecipitationComponent implements OnInit, AfterViewInit {
+  @ViewChild('chart') chartCanvas!: ElementRef<HTMLCanvasElement>;
+  private chart: Chart | undefined;
+
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: any;
@@ -97,6 +101,43 @@ export class PrecipitationComponent implements OnInit{
                   }
               }
           };
+        }
+      }
+
+
+      ngAfterViewInit() {
+        this.createChart();
+      }
+    
+      private createChart() {
+        const ctx = this.chartCanvas.nativeElement.getContext('2d');
+        if (ctx) {
+          this.chart = new Chart(ctx, {
+            type: 'line',
+            data: this.data,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                ...this.options.scales,
+                x: {
+                  ...this.options.scales.x,
+                  ticks: {
+                    ...this.options.scales.x.ticks,
+                    autoSkip: true,
+                    maxTicksLimit: 10
+                  }
+                }
+              }
+            }
+          });
+        }
+      }
+    
+      @HostListener('window:resize')
+      onResize() {
+        if (this.chart) {
+          this.chart.resize();
         }
       }
   }

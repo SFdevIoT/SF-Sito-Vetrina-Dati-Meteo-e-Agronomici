@@ -1,35 +1,23 @@
 import { Component } from '@angular/core';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {MatIconModule} from '@angular/material/icon';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
-import {MatDividerModule} from '@angular/material/divider';
-import { TabMenuModule } from 'primeng/tabmenu';
-import { MatTabsModule } from '@angular/material/tabs';
-import { CommonModule } from '@angular/common';
-
-
-/**
- * @title Using tabs with a custom label template
- */
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-table-group-bar',
   templateUrl: './tabs-group-bar.component.html',
   styleUrls: ['./tabs-group-bar.component.css'],
   standalone: false,
-  // imports: [TabMenuModule,MatDividerModule,MatIconModule,MatTabsModule, CommonModule],
+  // imports: [MatButtonToggleModule, SelectButtonModule, FormsModule],
 })
 export class TabsGroupBarComponent {
-  
-
-  selectedTab: number = 0;  // Inizializza il tab selezionato a 0
-  activeButtonId: string | null = null;  // Id del pulsante attivo
-
+  activeButtonId: string | null = null;
+  selectedCampaign: string = 'estate';
 
   buttons = [
-    { label: 'Ginosa', id: 'ginosea' },
-    { label: 'Grottaglie', id: 'grottaglieae' },
-    { label: 'Montemesola', id: 'montemesolae' }
+    { label: 'Ginosa', id: 'ginosa' },
+    { label: 'Grottaglie', id: 'grottaglie' },
+    { label: 'Montemesola', id: 'montemesola' }
   ];
 
   tabs = [
@@ -38,21 +26,17 @@ export class TabsGroupBarComponent {
   ];
 
   campaigns = [
-    { label: 'Estate', id: 'estate' },
-    { label: 'Inverno', id: 'inverno' }
+    { label: 'Inverno', id: 'inverno', icon: 'pi-snowflake' },
+    { label: 'Estate', id: 'estate', icon: 'pi-sun' }
   ];
 
-  constructor() { }
-
   handleButtonClick(id: string): void {
-    console.log(`Button clicked: ${id}`);
-    this.activeButtonId = id;  // Aggiorna il pulsante attivo
+    this.activeButtonId = id;
     // Aggiungi qui la logica per gestire il click del pulsante
   }
 
   handleTabChange(index: number): void {
     console.log(`Tab changed: ${this.tabs[index].id}`);
     // Aggiungi qui la logica per gestire il cambio tab
-    this.selectedTab = index;  // Aggiorna il tab selezionato
   }
 }

@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import dataGrottaglieAnno1Summer from '../../../Models/Grottaglie copy/dataArrayGrottaglie2021Summer';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-rainfall-fertigation-event',
   templateUrl: './rainfall-fertigation-event.component.html',
   styleUrls: ['./rainfall-fertigation-event.component.css']
 })
-export class RainfallFertigationEventComponent implements OnInit{
+export class RainfallFertigationEventComponent implements OnInit, AfterViewInit{
+    @ViewChild('chart') chartCanvas!: ElementRef;
+    private chart: Chart | undefined;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: any;
@@ -145,10 +148,46 @@ export class RainfallFertigationEventComponent implements OnInit{
                       color: textColor,
                       font: {
                           weight: 'bold'
-                      }
+                        }
+                    }
+                }
+            }
+        };
+    }
+    
+    ngAfterViewInit() {
+        this.createChart();
+      }
+    
+      private createChart() {
+        const ctx = this.chartCanvas.nativeElement.getContext('2d');
+        if (ctx) {
+          this.chart = new Chart(ctx, {
+            type: 'line',
+            data: this.data,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                ...this.options.scales,
+                x: {
+                  ...this.options.scales.x,
+                  ticks: {
+                    ...this.options.scales.x.ticks,
+                    autoSkip: true,
+                    maxTicksLimit: 10
                   }
+                }
               }
-          }
-      };
+            }
+          });
+        }
+      }
+    
+      @HostListener('window:resize')
+      onResize() {
+        if (this.chart) {
+          this.chart.resize();
+        }
+      }
   }
-}

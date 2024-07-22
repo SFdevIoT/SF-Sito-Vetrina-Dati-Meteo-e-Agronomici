@@ -9,8 +9,9 @@ import { HeaderComponent } from './Component/header/header.component';
 // import { TabsGroupBarComponent } from './Component/table-group-bar/tabs-group-bar.component';
 import { DashboardComponent } from './Component/dashboard/dashboard.component';
 import { ButtonSeCampaignSelectorComponent } from './Component/button-se-campaign-selector/button-se-campaign-selector.component';
+import { FooterComponent
 
-
+ } from './Component/footer/footer.component';
 // import { FileService } from './Services/file-services.service';
 
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -41,6 +42,7 @@ import { DataSourceGrottaglieService } from './Services/data-source-grottaglie.s
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 
 
@@ -70,6 +72,7 @@ import { DialogModule } from 'primeng/dialog';
 
 
     //  ===============================================================
+    FooterComponent
 
   ],
   imports: [
@@ -79,6 +82,9 @@ import { DialogModule } from 'primeng/dialog';
     MatToolbarModule,
     MatTableModule,
     MatButtonModule,
+    FormsModule,
+    SelectButtonModule,
+    MatButtonToggleModule,
     MatPaginatorModule,
     ChartModule,
     MatTabsModule,
@@ -96,7 +102,8 @@ import { DialogModule } from 'primeng/dialog';
     MultiSelectModule,
     TableModule,
     ButtonModule,
-    DialogModule
+    DialogModule,
+    
 
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

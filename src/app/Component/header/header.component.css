@@ -1,13 +1,103 @@
 .header {
-    background-color: #fff;
-    height: 60px;
-  }
+  height: 119px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: 3px solid #FF6600; /* Bordo arancione */
+  background-color: white; /* Assicura che lo sfondo sia bianco */
+}
   
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  animation: fadeIn 0.5s ease-in-out;
+
+}
+
+
+.logo-left, .logo-faith, .logo-react-eu {
+  height: 100px;
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);;
+  transform: scale(0.8); /* Inizia al 80% della dimensione */
+  animation: growLogo 0.5s ease-out forwards;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -webkit-transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  -moz-transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  -o-transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+
+.logo-left:hover, .logo-faith:hover, .logo-react-eu:hover {
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform: scale(1.2)  !important; /* Ingrandisce del 10% al passaggio del mouse */
+  filter: brightness(1.2) drop-shadow(0 4px 8px rgba(0,0,0,0.3)); /* Esalta leggermente l'immagine */
+}
+
+@keyframes growLogo {
+  from { transform: scale(0.7); }
+  to { transform: scale(1); }
+}
+
+
   .header-logo {
     width: 100%;
     height: 100%;
   }
   
+
+  .logo-left {
+    height: 100px; /* Adatta l'altezza in base alle tue esigenze */
+  }
+
+  .logo-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .header-title {
+    font-size: 0; /* Inizia da 0 per l'animazione */
+    font-size: 32px; /* Adatta la dimensione del font come necessario */
+    color: #333;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif; /* Un font più moderno e professionale */
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    animation: growText 0.5s ease-out forwards;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  @keyframes growText {
+    from { 
+      font-size: 0; 
+      opacity: 0;
+    }
+    to { 
+      font-size: calc(119px * 0.8 * 0.5); /* 80% dell'altezza dell'header, considerando il line-height */
+      opacity: 1;
+    }
+  }
+
+
+  /* Animazione semplice */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
   .header-nav {
     margin-top: 10px;
   }
@@ -24,3 +114,60 @@
     background-color: #000;
   }
   
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    height: 100px; /* Aumentato da 40px */
+    margin-right: 20px;
+    transition: all 0.3s ease;
+  }
+
+  
+  .logo:hover {
+    transform: scale(1.2);
+    filter: brightness(1.2);
+  }
+
+
+
+  .logo-faith {
+    height: 60px; /* Adatta l'altezza in base alle tue esigenze */
+    margin-right: 50px;
+  }
+
+  .logo-react-eu {
+    height: 100px; /* Adatta l'altezza in base alle tue esigenze */
+  }
+  
+  
+  .title {
+    font-size: 28px; /* Aumentato da 24px */
+    color: #333;
+    margin: 0;
+    text-align: center;
+    flex-grow: 1;
+  }
+  
+  .eu-logo {
+    height: 50px; /* Aumentato da 30px */
+    margin-left: 20px;
+  }
+  
+  
+  @media (max-width: 768px) {
+    .header-container {
+      flex-direction: column;
+    }
+  
+    .logo-container {
+      margin-bottom: 10px;
+    }
+  
+    .title {
+      margin: 10px 0;
+    }
+  }

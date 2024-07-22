@@ -18,6 +18,7 @@
     [style]="{ width: '75vw' }"
     [contentStyle]="{ height: '300px' }"
   > -->
+  <div (click)="$event.stopPropagation()">
     <p-table
       #dt
       [columns]="selectedColumns"
@@ -27,7 +28,7 @@
       [exportHeader]="'customExportHeader'"
       [tableStyle]="{ 'min-width': '50rem' }"
       [paginator]="true"
-      [rows]="10"
+      [rows]="5"
       [showCurrentPageReport]="true"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       [rowsPerPageOptions]="[5, 10, 15, 20]">

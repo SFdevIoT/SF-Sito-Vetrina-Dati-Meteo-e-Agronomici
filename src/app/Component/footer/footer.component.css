@@ -1,0 +1,109 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #cdebff;
+  color: rgb(0, 40, 81);
+  padding: 5px 10px;
+  z-index: 1000;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.company-info {
+  display: flex;
+  align-items: center;
+}
+
+.company-info, .social-links, .eu-logos {
+  display: flex;
+  align-items: center;
+}
+
+.asepa-logo {
+ 
+  height: 45px;
+  margin-right: 10px;
+
+}
+
+.asepa-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+}
+
+.asepa-text a {
+  color: rgba(41, 41, 41, 0);
+  text-decoration: none;
+}
+
+.company-info.right {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.footer-logo, .eu-logo {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.sf-logo {
+  height: 35px;
+  margin-right: 10px;
+  margin-right: 10px;
+
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+.social-links a {
+  color: white;
+  margin: 0 5px;
+  font-size: 14px;
+}
+
+.eu-logos {
+  flex: 0.5;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.eu-logo {
+  height: 60px;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .company-info, .social-links, .eu-logos {
+    margin: 5px 0;
+  }
+  .company-info.left, .company-info.right {
+    justify-content: center;
+  }
+}
+
+
+
+.divider {
+  width: 1px;
+  height: 40px;
+  background-color: rgb(0, 0, 0);
+  margin: 0 20px;
+  
+}

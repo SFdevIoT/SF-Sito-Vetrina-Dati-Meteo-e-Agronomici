@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
 // import dataGrottaglie from '../../../../Models/Grottaglie copy/ArrayObjectGrottaglie';
 import dataGrottaglieAnno1Summer from '../../../Models/Grottaglie copy/dataArrayGrottaglie2021Summer';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-et0-etc-trend',
@@ -8,7 +9,10 @@ import dataGrottaglieAnno1Summer from '../../../Models/Grottaglie copy/dataArray
   styleUrl: './et0-etc-trend.component.css',
 
 })
-export class Et0EtcTrendComponent implements OnInit{
+export class Et0EtcTrendComponent implements OnInit, AfterViewInit{
+    @ViewChild('chart') chartCanvas!: ElementRef;
+    private chart: Chart | undefined;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -106,5 +110,45 @@ export class Et0EtcTrendComponent implements OnInit{
             }
           }
       };
+
   }
+
+  ngAfterViewInit() {
+    this.createChart();
+  }
+
+
+  
+  @HostListener('window:resize')
+  onResize() {
+    if (this.chart) {
+        this.chart.resize();
+    }
+  }
+
+  createChart() {
+    const ctx = this.chartCanvas.nativeElement.getContext('2d');
+    if (ctx) {
+    this.chart = new Chart(ctx, {
+      type: 'line',
+      data: this.data,
+      options: {
+        ...this.options,
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          ...this.options.scales,
+          x: {
+            ...this.options.scales.x,
+            ticks: {
+              ...this.options.scales.x.ticks,
+              autoSkip: true,
+              maxTicksLimit: 10
+            }
+          }
+        }
+      }
+    });
+  }
+}
 }
