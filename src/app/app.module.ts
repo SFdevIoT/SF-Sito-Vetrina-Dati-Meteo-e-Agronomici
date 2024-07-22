@@ -2,6 +2,7 @@ import { BrowserModule, provideClientHydration } from '@angular/platform-browser
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { TableBasic } from './Component/Tables/table-data.component';
@@ -106,7 +107,7 @@ import { DataManagementService } from './Services/data-management.service';
     TableModule,
     ButtonModule,
     DialogModule,
-    
+    NoopAnimationsModule
 
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

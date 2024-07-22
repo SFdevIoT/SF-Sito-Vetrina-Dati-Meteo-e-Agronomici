@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, OnDestroy, ViewChild,Inject, PLATFORM_ID } from '@angular/core';
 import { Chart } from 'chart.js';
+import { isPlatformBrowser } from '@angular/common';
 import { DataManagementService } from 'src/app/Services/data-management.service';
 import { Subscription } from 'rxjs';
 
@@ -16,9 +17,12 @@ export class PrecipitationComponent implements OnInit, AfterViewInit, OnDestroy 
   data: any;
   options: any;
 
-  constructor(private dataService: DataManagementService) {}
+  constructor(private dataService: DataManagementService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
@@ -101,11 +105,14 @@ export class PrecipitationComponent implements OnInit, AfterViewInit, OnDestroy 
       }
     };
   }
-
+  }
   ngAfterViewInit() {
+    if (isPlatformBrowser(this.platformId)) {
     this.createChart();
   }
+  }
 
+  
   private createChart() {
     const ctx = this.chartCanvas.nativeElement.getContext('2d');
     if (ctx) {

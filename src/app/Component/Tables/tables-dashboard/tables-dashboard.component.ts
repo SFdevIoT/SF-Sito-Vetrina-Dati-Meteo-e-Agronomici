@@ -6,7 +6,6 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { FormsModule } from '@angular/forms';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
 import { DataManagementService } from 'src/app/Services/data-management.service';
 import { DataPoint } from 'src/app/Models/data-source.model';
@@ -146,12 +145,12 @@ this.selectedColumns = this.cols;
 
 
   saveAsExcelFile(buffer: any, fileName: string): void {
-    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-    let EXCEL_EXTENSION = '.xlsx';
-    const data: Blob = new Blob([buffer], {
-      type: EXCEL_TYPE
+    import('file-saver').then(module => {
+      const FileSaver = module.default;
+      const data: Blob = new Blob([buffer], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+      });
+      FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + '.xlsx');
     });
-    FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
-
   }
 }
