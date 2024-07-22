@@ -10,7 +10,7 @@ frontend:
       commands:
         - npm run build --prod
   artifacts:
-    baseDirectory: dist/sfsystem-data-view
+    baseDirectory: dist/sfsystem-data-view/browser
     files:
       - '**/*'
   cache:
