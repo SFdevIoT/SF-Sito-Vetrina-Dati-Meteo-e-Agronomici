@@ -43,8 +43,11 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { GinosaData } from './Models/ginosa-data';
+import { GrottaglieData } from './Models/grottaglie-data';
+import { MontemesolaData } from './Models/montemesola-data'
 
-
+import { DataManagementService } from './Services/data-management.service';
 
 // import { FormControl, FormGroup } from '@angular/forms';
 
@@ -108,10 +111,15 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
-    provideClientHydration(),
+    // provideClientHydration(),
     // FileService
-    DataSourceGrottaglieService,
-    dataGrottaglie
+    // DataSourceGrottaglieService,
+    // dataGrottaglie,
+    // GinosaData,
+    // GrottaglieData,
+    // MontemesolaData,
+    DataManagementService,
+    
   ],
   bootstrap: [AppComponent]
 })

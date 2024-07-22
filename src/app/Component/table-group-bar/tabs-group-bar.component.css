@@ -1,113 +1,166 @@
+:host {
+  --primary-bg: #bbbbd2;
+  --secondary-bg: #27293d;
+  --highlight-color: #3498db;
+  --text-color: #ffffff;
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+}
+
+.table-group-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px;
+  background-color: var(--primary-bg);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 .selector-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background-color: #27293d;
+  background-color: var(--secondary-bg);
   padding: 10px;
-  border-radius: 8px;
-  flex-wrap: nowrap; /* Impedisce il wrapping degli elementi */
+  border-radius: var(--border-radius);
 }
 
 .selector-group {
-  flex: 1;
   display: flex;
-  justify-content: center;
-  margin: 0 5px;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.location-buttons {
-  justify-content: flex-start;
+.location-selector {
+  flex: 1;
 }
 
-.location-buttons button {
-  background-color: #3498db;
-  color: white;
+.year-selectors {
+  display: flex;
+  gap: 15px;
+}
+
+label {
+  font-weight: bold;
+  color: var(--text-color);
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+button,
+mat-button-toggle,
+::ng-deep .p-button {
+  background-color: var(--secondary-bg);
+  color: var(--text-color);
   border: none;
-  padding: 8px 16px;
-  margin-right: 5px;
+  padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
-  white-space: nowrap; /* Impedisce il wrapping del testo del bottone */
+  transition: var(--transition);
+  font-size: 14px;
+  font-weight: bold;
+  min-width: 80px;
 }
 
-.location-buttons button.active {
+button.active,
+mat-button-toggle.mat-button-toggle-checked,
+::ng-deep .p-button.p-highlight {
+  background-color: var(--highlight-color);
+  box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+}
+
+button:hover,
+mat-button-toggle:hover,
+::ng-deep .p-button:hover {
   background-color: #2980b9;
+  transform: translateY(-2px);
 }
 
-.year-selector ::ng-deep .mat-button-toggle-group {
+.campaign-selector {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.campaign-icon {
+  height: 24px;
+  width: auto;
+}
+
+::ng-deep .mat-button-toggle-group {
   border: none;
-  background-color: #34495e;
-  border-radius: 4px;
-}
-
-.year-selector ::ng-deep .mat-button-toggle {
-  color: white;
   background-color: transparent;
 }
 
-.year-selector ::ng-deep .mat-button-toggle-checked {
-  background-color: #2c3e50;
+::ng-deep .mat-button-toggle {
+  background-color: var(--secondary-bg);
+  color: var(--text-color);
+  border: none !important;
+  transition: var(--transition);
 }
 
-.campaign-toggle {
+::ng-deep .mat-button-toggle-label-content {
+  line-height: 24px !important;
+  padding: 0 8px !important;
+  font-size: 12px !important;
+}
+
+::ng-deep .mat-button-toggle-checked {
+  background-color: var(--highlight-color);
+}
+
+p-selectButton ::ng-deep .p-selectbutton {
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
 }
 
-.campaign-toggle ::ng-deep .p-selectbutton {
+p-selectButton ::ng-deep .p-button {
+  background-color: var(--secondary-bg);
+  color: var(--text-color);
   border: none;
+  padding: 4px 8px;
+  font-size: 12px;
 }
 
-.campaign-toggle ::ng-deep .p-button {
-  background-color: #34495e;
-  border: none;
-  color: white;
-  transition: all 0.3s;
-  padding: 8px 16px;
+p-selectButton ::ng-deep .p-button.p-highlight {
+  background-color: var(--highlight-color);
 }
 
-.campaign-toggle ::ng-deep .p-button.p-highlight {
-  background-color: #f1c40f;
-  color: #2c3e50;
+p-selectButton ::ng-deep .p-button.p-highlight[ng-reflect-model="estate"] {
+  background-color: #f1c40f; /* Colore giallo/arancione per l'estate */
 }
 
-.campaign-toggle ::ng-deep .p-button:first-child.p-highlight {
-  background-color: #3498db;
+
+p-selectButton ::ng-deep .p-button i {
+  font-size: 14px;
+  margin-right: 4px;
+  color: var(--text-color); /* Assicura che l'icona sia visibile */
 }
 
-.campaign-toggle ::ng-deep .p-button i {
-  margin-right: 5px;
-  font-size: 1.2em; /* Aumenta la dimensione dell'icona */
-
+.pi-snowflake, .pi-sun {
+  display: inline-block !important;
+  margin-right: 3px;
+  font-size: 1em;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   .selector-container {
     flex-direction: column;
-    align-items: stretch;
+    align-items: flex-start;
+  }
+
+  .year-selectors {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .selector-group {
+    width: 100%;
     margin: 5px 0;
   }
-
-  .location-buttons, .campaign-toggle {
-    justify-content: center;
-  }
-}
-
-
-
-.campaign-icon {
-  height: 40px; /* Regola questa altezza in base all'altezza del tuo p-selectButton */
-  width: auto;
-  margin: 0 10px;
-}
-
-/* Assicurati che le icone siano visibili */
-.pi-snowflake, .pi-sun {
-  display: inline-block !important;
 }

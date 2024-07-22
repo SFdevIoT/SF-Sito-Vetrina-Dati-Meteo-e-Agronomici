@@ -1,160 +1,163 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import dataGrottaglieAnno1Summer from '../../../Models/Grottaglie copy/dataArrayGrottaglie2021Summer';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
+import { DataManagementService } from 'src/app/Services/data-management.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-rain-et0-etc-trend',
   templateUrl: './rain-et0-etc-trend.component.html',
-  styleUrl: './rain-et0-etc-trend.component.css'
+  styleUrls: ['./rain-et0-etc-trend.component.css']
 })
-export class RainEt0EtcTrendComponent implements OnInit, AfterViewInit{
-    @ViewChild('chart') chartCanvas!: ElementRef;
-    private chart: Chart | undefined;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data: any;
+export class RainEt0EtcTrendComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('chart') chartCanvas!: ElementRef;
+  private chart: Chart | undefined;
+  private subscription: Subscription | undefined;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    options: any;
+  data: any;
+  options: any;
 
-    ngOnInit() {
-        if (typeof window !== 'undefined') {
-        const documentStyle = getComputedStyle(document.documentElement);
-        const textColor = documentStyle.getPropertyValue('--text-color');
-        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+  constructor(private dataService: DataManagementService) {}
 
-          // Filtra solo i dati con valori non null per Et0 ed Etc
-            const filteredData = dataGrottaglieAnno1Summer.filter(obj => obj.Cultivar !== null);
-     
-            const rainsData = filteredData.map(obj => obj.precipitazioni);
-            const etcData = filteredData.map(obj => obj.etc);
-            const et0Data = filteredData.map(obj => obj.et0);
+  ngOnInit() {
+    const documentStyle = getComputedStyle(document.documentElement);
+    const textColor = documentStyle.getPropertyValue('--text-color');
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-         // const dateLabels= filteredData.map(obj => obj.DATA);
+    this.subscription = this.dataService.getCurrentData().subscribe(data => {
+      const filteredData = data.filter(obj => obj.Cultivar !== null);
+      const rainsData = filteredData.map(obj => obj.precipitazioni);
+      const etcData = filteredData.map(obj => obj.etc);
+      const et0Data = filteredData.map(obj => obj.et0);
 
-        
-        
-        this.data = {
-            labels: filteredData.map(obj => obj.DATA),
-            datasets: [
-
-                {
-                    type: 'bar',
-                    label: 'Precipitazioni',
-                    backgroundColor: documentStyle.getPropertyValue('--orange-500'),
-                    data: rainsData,
-                    borderColor: 'black',
-                    borderWidth: 0.3
-                },
-
-                {
-                    type: 'line',
-                    label: 'Et0',
-                    borderColor: documentStyle.getPropertyValue('--green-500'),
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0,
-                    data: et0Data,
-                    pointRadius: 0.3, // Imposta il raggio del punto a 0 per nascondere i pallini
-                },
-                
-                {
-                    type: 'line',
-                    label: 'Etc',
-                    borderColor: documentStyle.getPropertyValue('--blue-500'),
-                    borderWidth: 2,
-                    fill: false,
-                    tension: 0,
-                    data: etcData,
-                    pointRadius: 0.3, // Imposta il raggio del punto a 0 per nascondere i pallini
-                },
-                
-            ]
-        };
-        
-        this.options = {
-            maintainAspectRatio: false,
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        color: textColor
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        color: textColorSecondary,
-                        maxTicksLimit: 6,
-                        maxRotation: 45, // Imposta l'angolo massimo di rotazione
-                        minRotation: 45  // Imposta l'angolo minimo di rotazione
-                    },
-                    grid: {
-                        color: surfaceBorder
-                    }
-                },
-                y: {
-                    type: 'linear',
-                    display: true,
-                    position: 'left',
-                    ticks: {
-                        color: textColorSecondary,
-                        font: {
-                            size: 14,
-                            weight: 'bold'
-                        }
-                    },
-                    grid: {
-                        color: surfaceBorder
-                    },
-                    scaleLabel: {
-                        display:true,
-                        labelString: 'Precipitazioni mm',
-                        color: textColor,
-                        font: {
-                            weight: 'bold'
-                        }
-                    }
-                }
-            }
-        };
-    }
-    }
-
-    ngAfterViewInit() {
-        this.createChart();
-      }
-    
-      private createChart() {
-        const ctx = this.chartCanvas.nativeElement.getContext('2d');
-        if (ctx) {
-          this.chart = new Chart(ctx, {
+      this.data = {
+        labels: filteredData.map(obj => obj.DATA),
+        datasets: [
+          {
+            type: 'bar',
+            label: 'Precipitazioni',
+            backgroundColor: documentStyle.getPropertyValue('--orange-500'),
+            data: rainsData,
+            borderColor: 'black',
+            borderWidth: 0.3
+          },
+          {
             type: 'line',
-            data: this.data,
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                ...this.options.scales,
-                x: {
-                  ...this.options.scales.x,
-                  ticks: {
-                    ...this.options.scales.x.ticks,
-                    autoSkip: true,
-                    maxTicksLimit: 10
-                  }
-                }
+            label: 'Et0',
+            borderColor: documentStyle.getPropertyValue('--green-500'),
+            borderWidth: 2,
+            fill: true,
+            tension: 0,
+            data: et0Data,
+            pointRadius: 0.3,
+          },
+          {
+            type: 'line',
+            label: 'Etc',
+            borderColor: documentStyle.getPropertyValue('--blue-500'),
+            borderWidth: 2,
+            fill: false,
+            tension: 0,
+            data: etcData,
+            pointRadius: 0.3,
+          },
+        ]
+      };
+
+      if (this.chart) {
+        this.chart.data = this.data;
+        this.chart.update();
+      }
+    });
+    
+    this.options = {
+      maintainAspectRatio: false,
+      responsive: true,
+      plugins: {
+        legend: {
+          labels: {
+            color: textColor
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: textColorSecondary,
+            maxTicksLimit: 6,
+            maxRotation: 45,
+            minRotation: 45
+          },
+          grid: {
+            color: surfaceBorder
+          }
+        },
+        y: {
+          type: 'linear',
+          display: true,
+          position: 'left',
+          ticks: {
+            color: textColorSecondary,
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: surfaceBorder
+          },
+          scaleLabel: {
+            display: true,
+            labelString: 'Precipitazioni mm',
+            color: textColor,
+            font: {
+              weight: 'bold'
+            }
+          }
+        }
+      }
+    };
+  }
+
+  ngAfterViewInit() {
+    this.createChart();
+  }
+
+  private createChart() {
+    const ctx = this.chartCanvas.nativeElement.getContext('2d');
+    if (ctx) {
+      this.chart = new Chart(ctx, {
+        type: 'line',
+        data: this.data,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            ...this.options.scales,
+            x: {
+              ...this.options.scales.x,
+              ticks: {
+                ...this.options.scales.x.ticks,
+                autoSkip: true,
+                maxTicksLimit: 10
               }
             }
-          });
+          }
         }
-      }
-    
-      @HostListener('window:resize')
-      onResize() {
-        if (this.chart) {
-          this.chart.resize();
-        }
-      }
+      });
+    }
   }
+
+  @HostListener('window:resize')
+  onResize() {
+    if (this.chart) {
+      this.chart.resize();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+}

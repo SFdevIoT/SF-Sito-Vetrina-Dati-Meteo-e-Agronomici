@@ -1,8 +1,5 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
-// import { dataGrottaglie } from '../../../Models/Grottaglie copy/ArrayObjectGrottaglie';
-// import dataGinosaAnno1Summer from '../../../Models/Ginosa/dataArrayGinosa2021Summer';
+import { Component, OnInit, Input, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { DataSourceGrottaglieService } from '../../../Services/data-source-grottaglie.service';
-import { DataModel } from '../../../Models/dataModel.model';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -10,7 +7,10 @@ import { FormsModule } from '@angular/forms';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import FileSaver from 'file-saver';
-// import {DialogModule} from 'primeng/dialog'
+import { Subscription } from 'rxjs';
+import { DataManagementService } from 'src/app/Services/data-management.service';
+import { DataPoint } from 'src/app/Models/data-source.model';
+
 
 
 
@@ -33,21 +33,22 @@ interface ExportColumn {
 @Component({
   selector: 'app-tables-dashboard',
   standalone: false,
-  // imports: [TableModule, ButtonModule, MultiSelectModule, FormsModule],
   templateUrl: './tables-dashboard.component.html',
   styleUrls: ['./tables-dashboard.component.css'],
 })
-export class TablesDashboardComponent implements OnInit {
+export class TablesDashboardComponent implements OnInit, OnDestroy {
 
-  dati!: DataModel[]; // Assicurati di specificare il percorso corretto
+  dati!: DataPoint[]; // Assicurati di specificare il percorso corretto
   // dialogVisible: boolean = true;
-  selectedData!: DataModel[];
+  selectedData!: DataPoint[];
   cols!: Column[];
   selectedColumns!: Column[];
   exportColumns!: ExportColumn[];
 
+  private subscription: Subscription | undefined;
+
   constructor(
-    private dataService: DataSourceGrottaglieService,
+    private dataService: DataManagementService,
     private cd: ChangeDetectorRef,
 
   ) { }
@@ -55,14 +56,24 @@ export class TablesDashboardComponent implements OnInit {
 
   ngOnInit() {
 
-    this.dataService.getDataSet().then((data) => {
+    this.subscription = this.dataService.getCurrentData().subscribe((data) => {      
+  
       this.dati = data;
       this.selectedData = data;
+      this.initializeColumns();
       this.cd.markForCheck();
     });
 
-    //  this.cols = [
-    //      { field: 'cols!: Column[];
+  }
+
+     ngOnDestroy() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
+    }
+
+
+  private initializeColumns() {
 
     this.cols = [
       { field: 'DATA', header: 'Data' },
@@ -93,30 +104,22 @@ export class TablesDashboardComponent implements OnInit {
       { field: 'turnoIrrigoHarg1', header: 'Turno irriguo Harg. (mm)' },
     ];
 
-
-
+this.selectedColumns = this.cols;
+  
 
     this.exportColumns = this.cols.map((col) => ({
       title: col.header,
       dataKey: col.field,
+
     }));
 
-    this.selectedColumns = this.cols;
 
-    //     // Assicurati che la colonna "DATA" sia presente nelle colonne selezionate
-    // const dataColumn = this.cols.find(col => col.field === 'DATA');
-    // if (dataColumn) {
-    //   this.selectedColumns.unshift(dataColumn);
-    // }
   }
 
 
-  //   showDialog() {
-  //     this.dialogVisible = true;
-
-
-  // }
-
+  private updateColumns() {
+    // Aggiorna le colonne se necessario in base ai nuovi dati
+  }
 
 
 

@@ -1,6 +1,6 @@
 // import { Data } from "@angular/router";
 
-export interface DataModel {
+export interface DataPoint {
   DATA: string;
   tempMedia: number | null;
   tempMin: number | null;
@@ -28,4 +28,13 @@ export interface DataModel {
   turnoIrrigoHarg: number | string | null;
   turnoIrrigoHarg1: number | string | null;
 
+}
+
+
+
+export interface DataSet {
+  city: string;
+  year: number;
+  season: 'summer' | 'winter';
+  data: DataPoint[];
 }

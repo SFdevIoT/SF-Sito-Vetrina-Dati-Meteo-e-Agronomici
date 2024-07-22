@@ -1,154 +1,185 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
-// import dataGrottaglie from '../../../../Models/Grottaglie copy/ArrayObjectGrottaglie';
-import dataGrottaglieAnno1Summer from '../../../Models/Grottaglie copy/dataArrayGrottaglie2021Summer';
-import { Chart } from 'chart.js';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, HostListener, Input, OnDestroy } from '@angular/core';
+import { DataManagementService } from 'src/app/Services/data-management.service';
+import { Chart, ChartConfiguration, ChartOptions } from 'chart.js';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-et0-etc-trend',
   templateUrl: './et0-etc-trend.component.html',
-  styleUrl: './et0-etc-trend.component.css',
-
+  styleUrls: ['./et0-etc-trend.component.css'],
 })
-export class Et0EtcTrendComponent implements OnInit, AfterViewInit{
-    @ViewChild('chart') chartCanvas!: ElementRef;
-    private chart: Chart | undefined;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  options: any;
-
-
+export class Et0EtcTrendComponent implements OnInit, AfterViewInit, OnDestroy {
+    @ViewChild('chart') chartCanvas!: ElementRef<HTMLCanvasElement>;
+    @Input() isPreview: boolean = false;
   
+    private chart: Chart | undefined;
+    private subscription: Subscription | undefined;
+    data: ChartConfiguration<'line'>['data'] = { datasets: [] };
+    options: ChartOptions<'line'> = {};
+  
+    constructor(private dataService: DataManagementService) {}
 
-  ngOnInit() {
-    if (typeof window !== 'undefined') {
+    ngOnInit() {
       const documentStyle = getComputedStyle(document.documentElement);
       const textColor = documentStyle.getPropertyValue('--text-color');
       const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
       const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
-
-      // Filtra solo i dati con valori non null per Et0 ed Etc
-    const filteredData = dataGrottaglieAnno1Summer.filter(obj => obj.Cultivar !== null );
-     
-      const etcData = filteredData.map(obj => obj.etc);
-    const et0Data = filteredData.map(obj => obj.et0);
-
-    // const dateLabels= filteredData.map(obj => obj.DATA);
-
-      this.data = {
+  
+      this.subscription = this.dataService.getCurrentData().subscribe(data => {
+        const filteredData = data.filter(obj => obj.Cultivar !== null);
+        const etcData = filteredData.map(obj => obj.etc);
+        const et0Data = filteredData.map(obj => obj.et0);
+  
+        this.data = {
           labels: filteredData.map(obj => obj.DATA),
           datasets: [
-              {
-                  label: 'Et0',
-                  fill: true,
-                  borderColor: documentStyle.getPropertyValue('--blue-500'),
-                  yAxisID: 'y',
-                  tension: 0,
-                  data: et0Data,
-                  pointRadius: 0.5 // Imposta il raggio dei punti
-              },
-              {
-                  label: 'Etc',
-                  fill: false,
-                  borderColor: documentStyle.getPropertyValue('--orange-500'),
-                  yAxisID: 'y1',
-                  tension: 0,
-                  data: etcData,
-                  pointRadius: 0.5 // Imposta il raggio dei punti
-              }
+            {
+              type: 'line' as const,
+              label: 'Et0',
+              data: et0Data,
+              borderColor: documentStyle.getPropertyValue('--blue-500'),
+              backgroundColor: documentStyle.getPropertyValue('--blue-500') + '40',
+              fill: true,
+              tension: 0.4,
+              pointRadius: 0.5,
+              pointHoverRadius: 5,
+              pointHitRadius: 10,
+              pointBackgroundColor: documentStyle.getPropertyValue('--blue-500'),
+              yAxisID: 'y',
+            },
+            {
+              type: 'line' as const,
+              label: 'Etc',
+              data: etcData,
+              borderColor: documentStyle.getPropertyValue('--orange-500'),
+              fill: false,
+              tension: 0,
+              pointRadius: 0.5,
+              yAxisID: 'y1',
+            }
           ]
-      };
-      //Configurazione dell'oggetto
-      this.options = {
-          stacked: false,
-          maintainAspectRatio: false,
-          responsive: true,
-          plugins: {
-              legend: {
-                  labels: {
-                      color: textColor
-                  }
-              }
-          },
-          scales: {
-              x: {
-                  ticks: {
-                      color: textColorSecondary,
-                      maxTicksLimit: 17,
-                      maxRotation: 45, // Imposta l'angolo massimo di rotazione
-                      minRotation: 45  // Imposta l'angolo minimo di rotazione
-                  },
-                  grid: {
-                      color: surfaceBorder
+        };
 
-                  }
-              },
-              y: {
-                  type: 'linear',
-                  display: true,
-                  position: 'left',
-                  ticks: {
-                      color: textColorSecondary
-                  },
-                  grid: {
-                      color: surfaceBorder
-                  }
-              },
-              y1: {
-                  type: 'linear',
-                  display: true,
-                  position: 'right',
-                  ticks: {
-                      color: textColorSecondary
-                  },
-                  grid: {
-                      drawOnChartArea: false,
-                      color: surfaceBorder
-                  }
+        if (this.chart) {
+          this.chart.data = this.data;
+          this.chart.update();
+        }
+      });
+
+      this.options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: {
+              color: textColor,
+              font: { size: 12 }
+            },
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: (context) => {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                if (context.parsed.y !== null) {
+                  label += context.parsed.y.toFixed(2);
+                }
+                return label;
               }
             }
           }
-      };
-
-  }
-
-  ngAfterViewInit() {
-    this.createChart();
-  }
-
-
-  
-  @HostListener('window:resize')
-  onResize() {
-    if (this.chart) {
-        this.chart.resize();
-    }
-  }
-
-  createChart() {
-    const ctx = this.chartCanvas.nativeElement.getContext('2d');
-    if (ctx) {
-    this.chart = new Chart(ctx, {
-      type: 'line',
-      data: this.data,
-      options: {
-        ...this.options,
-        responsive: true,
-        maintainAspectRatio: false,
+        },
         scales: {
-          ...this.options.scales,
           x: {
-            ...this.options.scales.x,
             ticks: {
-              ...this.options.scales.x.ticks,
+              color: textColorSecondary,
+              maxTicksLimit: 10,
+              maxRotation: 45,
+              minRotation: 45,
               autoSkip: true,
-              maxTicksLimit: 10
+            },
+            grid: { color: surfaceBorder },
+            title: {
+              display: true,
+              text: 'Data',
+              color: textColor,
+              font: { size: 12, weight: 'bold' }
+            }
+          },
+          y: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+            ticks: {
+              color: textColorSecondary,
+              font: { size: 12 }
+            },
+            grid: { color: surfaceBorder },
+            title: {
+              display: true,
+              text: 'Valore (mm)',
+              color: textColor,
+              font: { size: 12, weight: 'bold' }
+            }
+          },
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            ticks: { color: textColorSecondary },
+            grid: {
+              drawOnChartArea: false,
+              color: surfaceBorder
             }
           }
         }
+      };
+    }
+
+    ngAfterViewInit() {
+      this.createChart();
+      this.updateChartOptions();
+    }
+  
+    private updateChartOptions() {
+      if (this.chart?.options?.scales?.['x']?.ticks) {
+        const chartWidth = this.chartCanvas.nativeElement.clientWidth;
+        const maxTicksLimit = Math.max(5, Math.floor(chartWidth / 50));
+        this.chart.options.scales['x'].ticks.maxTicksLimit = maxTicksLimit;
+        this.chart.update();
       }
-    });
-  }
-}
+    }
+  
+    @HostListener('window:resize')
+    onResize() {
+      this.updateChartOptions();
+    }
+  
+    createChart() {
+      const ctx = this.chartCanvas.nativeElement.getContext('2d');
+      if (!ctx) return;
+  
+      if (this.isPreview) {
+        if (this.options.scales?.['y']) {
+          this.options.scales['y'].min = 0;
+          this.options.scales['y'].max = Math.max(...this.data.datasets.flatMap(d => d.data as number[])) * 1.1;
+        }
+      }
+  
+      this.chart = new Chart(ctx, {
+        type: 'line',
+        data: this.data,
+        options: this.options
+      });
+    }
+
+    ngOnDestroy() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
+    }
 }

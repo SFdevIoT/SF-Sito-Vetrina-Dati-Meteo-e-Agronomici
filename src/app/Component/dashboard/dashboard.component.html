@@ -1,10 +1,15 @@
 <div class="dashboard-container">
   <div class="selection-area">
+    <div class="table-group-bar-container">
+      <h3 class="rotated-header">Seleziona Sorgente dati</h3>
+      <div class="table-group-bar-wrapper">
     <app-table-group-bar></app-table-group-bar>
   </div>
-  
-
-  <div class="chart-previews">
+    </div>
+    
+  <div class="chart-previews-container">
+    <h3 class="rotated-header">Anteprime Grafici</h3>
+    <div class="chart-previews">
     <div class="chart-preview" (click)="selectChart('et0-etc')">
       <app-et0-etc-trend></app-et0-etc-trend>
     </div>
@@ -17,6 +22,8 @@
     <div class="chart-preview" (click)="selectChart('rainfall-fertigation')">
       <app-rainfall-fertigation-event></app-rainfall-fertigation-event>
     </div>
+  </div>
+  </div>
   </div>
 
 
