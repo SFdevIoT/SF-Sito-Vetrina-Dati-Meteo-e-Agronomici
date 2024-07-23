@@ -9,6 +9,7 @@ frontend:
     build:
       commands:
         - npm run build --prod
+        - ls -R dist
   artifacts:
     baseDirectory: dist/sfsystem-data-view/browser
     files:
