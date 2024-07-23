@@ -58,10 +58,8 @@
             ],
             "scripts": [],
             "server": "src/main.server.ts",
-            "prerender": false,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            "prerender": false
+         
           },
           "configurations": {
             "production": {
