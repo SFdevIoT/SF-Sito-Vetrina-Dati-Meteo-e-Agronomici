@@ -9,7 +9,6 @@ import { TableBasic } from './Component/Tables/table-data.component';
 import { HeaderComponent } from './Component/header/header.component';
 // import { TabsGroupBarComponent } from './Component/table-group-bar/tabs-group-bar.component';
 import { DashboardComponent } from './Component/dashboard/dashboard.component';
-import { ButtonSeCampaignSelectorComponent } from './Component/button-se-campaign-selector/button-se-campaign-selector.component';
 import { FooterComponent
 
  } from './Component/footer/footer.component';
@@ -35,7 +34,6 @@ import { RainfallFertigationEventComponent } from './Component/Charts/rainfall-f
 import { RainEt0EtcTrendComponent } from './Component/Charts/rain-et0-etc-trend/rain-et0-etc-trend.component';
 import { PrecipitationComponent } from './Component/Charts/precipitation/precipitation.component';
 import { DividerModule } from 'primeng/divider';
-import { dataGrottaglie } from './Models/Grottaglie copy/ArrayObjectGrottaglie';
 import { CommonModule } from '@angular/common';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TablesDashboardComponent } from './Component/Tables/tables-dashboard/tables-dashboard.component';
@@ -61,7 +59,6 @@ import { DataManagementService } from './Services/data-management.service';
     TableBasic,
     HeaderComponent,
     DashboardComponent,
-    ButtonSeCampaignSelectorComponent,
     TabsGroupBarComponent,
     TablesDashboardComponent,
 

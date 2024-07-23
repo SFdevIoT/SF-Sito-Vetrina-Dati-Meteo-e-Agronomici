@@ -17,9 +17,9 @@
   <div class="year-selectors">
     <div class="selector-group">
           <label>Seleziona Anno:</label>
-    <mat-button-toggle-group (change)="handleTabChange($event.value)">
-      <mat-button-toggle *ngFor="let tab of tabs; let i = index" [value]="i">
-        {{ tab.label }}
+          <mat-button-toggle-group [value]="selectedYear" (change)="handleTabChange($event.value)">      
+            <mat-button-toggle *ngFor="let tab of tabs" [value]="tab.id">        
+              {{ tab.label }}
       </mat-button-toggle>
     </mat-button-toggle-group>
   </div>
@@ -29,8 +29,8 @@
     <label>Seleziona campagna:</label>
     <div class="campaign-selector">
       <img src="assets/winter-icon.png" alt="Winter" class="campaign-icon">
-    <p-selectButton [options]="campaigns" [(ngModel)]="selectedCampaign" optionLabel="label" optionValue="id">
-      <ng-template let-item pTemplate>
+      <p-selectButton [options]="campaigns" [(ngModel)]="selectedCampaign" (onChange)="handleCampaignChange($event.value)" optionLabel="label" optionValue="id">      
+        <ng-template let-item pTemplate>
         <i [class]="item.id === 'inverno' ? 'pi pi-snowflake' : 'pi pi-sun'"></i>
         {{ item.label }}
       </ng-template>

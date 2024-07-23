@@ -12,9 +12,9 @@ import { Subscription } from 'rxjs';
   standalone: false,
   // imports: [MatButtonToggleModule, SelectButtonModule, FormsModule],
 })
-export class TabsGroupBarComponent implements OnInit, OnDestroy {
+export class TabsGroupBarComponent implements OnInit {
   activeButtonId: string | null = null;
-  selectedYear: string = '2022';
+  selectedYear: number = 2022;
   selectedCampaign: string = 'estate';
   // selectedCity: string = 'Ginosa';
 
@@ -29,8 +29,8 @@ export class TabsGroupBarComponent implements OnInit, OnDestroy {
   ];
 
   tabs = [
-    { label: '2021', id: '2021' },
-    { label: '2022', id: '2022' }
+    { label: '2021', id: 2021 },
+    { label: '2022', id: 2022 }
   ];
 
   campaigns = [
@@ -42,32 +42,44 @@ export class TabsGroupBarComponent implements OnInit, OnDestroy {
   constructor(private dataService: DataManagementService) {}
 
   ngOnInit() {
-    this.subscriptions.push(
-      this.dataService.getSelectedCity().subscribe(city => {
-        this.activeButtonId = city.toLowerCase();
-      }),
-      this.dataService.getSelectedYear().subscribe(year => {
-        this.selectedYear = year;
-      }),
-      this.dataService.getSelectedSeason().subscribe(season => {
-        this.selectedCampaign = season;
-      })
-    );
+    this.dataService.getSelectedCity().subscribe(city => {
+      console.log('Component received city:', city);
+
+      this.activeButtonId = city;
+    });
+    this.dataService.getSelectedYear().subscribe(year => {
+      console.log('Component received year:', year);
+
+      this.selectedYear = year;
+    });
+    this.dataService.getSelectedSeason().subscribe(season => {
+      console.log('Component received season:', season);
+
+      this.selectedCampaign = season;
+    });
+
+    this.dataService.getCurrentData().subscribe(data => {
+      console.log('Component received data:', data);
+    });
   }
 
-  ngOnDestroy() {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
-  }
+ 
 
   handleButtonClick(id: string): void {
+    console.log('Button clicked:', id);
+
     this.dataService.setCity(id);
   }
 
-  handleTabChange(year: string): void {
+  handleTabChange(year: number): void {
+    console.log('Tab changed:', year);
+
     this.dataService.setYear(year);
   }
 
   handleCampaignChange(campaign: string): void {
+    console.log('Campaign changed:', campaign);
+
     this.dataService.setSeason(campaign);
   }
 }

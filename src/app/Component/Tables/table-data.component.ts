@@ -1,4 +1,3 @@
-import dataGinosaAnno1Summer from "../../Models/Ginosa/dataArrayGinosa2021Summer";
 import { DataPoint } from "src/app/Models/data-source.model";
 import { MatTableModule } from "@angular/material/table";
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
@@ -47,7 +46,7 @@ export class TableBasic implements AfterViewInit {
                                 'turnoIrrigoHarg',
                                 'turnoIrrigoHarg1',
                               ];
-  dataSource = new MatTableDataSource<DataPoint>(Ginosa);
+  // dataSource = new MatTableDataSource<DataPoint>(Ginosa);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -56,14 +55,14 @@ export class TableBasic implements AfterViewInit {
 
   ngAfterViewInit() {
     
-    this.dataSource.paginator = this.paginator;
+    // this.dataSource.paginator = this.paginator;
   }
 }
 
 
 
 
-const Ginosa:DataPoint[]=dataGinosaAnno1Summer
+// const Ginosa:DataPoint[]=dataGinosaAnno1Summer
 
 // // Stampa l'array di oggetti
 // for (const object of Grottaglie) {

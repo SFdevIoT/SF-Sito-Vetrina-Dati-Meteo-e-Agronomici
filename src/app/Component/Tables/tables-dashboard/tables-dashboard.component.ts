@@ -56,6 +56,9 @@ export class TablesDashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.subscription = this.dataService.getCurrentData().subscribe((data) => {      
+
+      console.log('Received data in component:', data);
+
   
       this.dati = data;
       this.selectedData = data;

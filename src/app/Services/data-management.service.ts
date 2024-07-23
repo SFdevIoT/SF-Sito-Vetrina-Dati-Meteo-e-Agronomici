@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 import { DataSet, DataPoint } from '../Models/data-source.model';
 import { GinosaData } from '../Models/ginosa-data';
 import { GrottaglieData } from '../Models/grottaglie-data';
@@ -10,37 +10,51 @@ import { MontemesolaData } from '../Models/montemesola-data';
 })
 export class DataManagementService {
   private allData: DataSet[] = [...GinosaData, ...GrottaglieData, ...MontemesolaData];
-  private currentDataSubject = new BehaviorSubject<DataPoint[]>([]);
+  // private currentDataSubject = new BehaviorSubject<DataPoint[]>([]);
   private selectedCitySubject = new BehaviorSubject<string>('Grottaglie');
-  private selectedYearSubject = new BehaviorSubject<string>('2022');
+  private selectedYearSubject = new BehaviorSubject<number>(2022);
   private selectedSeasonSubject = new BehaviorSubject<string>('estate');
 
-  constructor() {this.updateCurrentData();}
+  constructor() {    console.log('Initial allData:', this.allData);
+  }
+  
 
   setCity(city: string): void {
+    console.log('Setting city:', city);
     this.selectedCitySubject.next(city);
-    this.updateCurrentData();
   }
 
-  setYear(year: string): void {
+  setYear(year: number): void {
+    console.log('Setting year:', year);
     this.selectedYearSubject.next(year);
-    this.updateCurrentData();
   }
 
   setSeason(season: string): void {
+    console.log('Setting season:', season);
     this.selectedSeasonSubject.next(season);
-    this.updateCurrentData();
   }
 
   getCurrentData(): Observable<DataPoint[]> {
-    return this.currentDataSubject.asObservable();
+    return combineLatest([
+      this.selectedCitySubject,
+      this.selectedYearSubject,
+      this.selectedSeasonSubject
+    ]).pipe(
+      map(([city, year, season]) => {
+        const selectedDataSet = this.allData.find(
+          set => set.city.toLowerCase() === city.toLowerCase() && set.year === year && set.season === (season === 'estate' ? 'summer' : 'winter')
+        );
+        console.log('Selected dataset:', selectedDataSet);
+        return selectedDataSet ? selectedDataSet.data : [];
+      })
+    );
   }
 
   getSelectedCity(): Observable<string> {
     return this.selectedCitySubject.asObservable();
   }
 
-  getSelectedYear(): Observable<string> {
+  getSelectedYear(): Observable<number> {
     return this.selectedYearSubject.asObservable();
   }
 
@@ -48,15 +62,4 @@ export class DataManagementService {
     return this.selectedSeasonSubject.asObservable();
   }
 
-  private updateCurrentData(): void {
-    const city = this.selectedCitySubject.value;
-    const year = parseInt(this.selectedYearSubject.value);
-    const season = this.selectedSeasonSubject.value === 'estate' ? 'summer' : 'winter';
-
-    const selectedDataSet = this.allData.find(
-      set => set.city === city && set.year === year && set.season === season
-    );
-
-    this.currentDataSubject.next(selectedDataSet ? selectedDataSet.data : []);
-  }
 }
